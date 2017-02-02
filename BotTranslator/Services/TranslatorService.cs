@@ -68,6 +68,17 @@ namespace BotTranslator.Services
             await sc.BotState.SetUserDataAsync(activity.ChannelId, activity.From.Id, data);
         }
 
+        public void SetLanguage(IDialogContext context, string languageCode)
+        {
+            if (string.IsNullOrWhiteSpace(languageCode))
+            {
+                context.UserData.RemoveValue("LanguageCode");
+            }
+            else
+            {
+                context.UserData.SetValue("LanguageCode", languageCode);
+            }
+        }
 
 
         private string _subsKey

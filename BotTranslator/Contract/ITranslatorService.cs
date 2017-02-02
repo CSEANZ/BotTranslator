@@ -21,5 +21,6 @@ namespace BotTranslator.Contract
         Task<string> Detect(string text);
         Task TranslateIn(Activity activity, bool onlyIfEnabled);
         void SetKey(string key);
+        void SetLanguage(IDialogContext context, string languageCode);
     }
 }
