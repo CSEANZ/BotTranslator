@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26127.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Sample.PizzaBot", "Samples\PizzaBot\Microsoft.Bot.Sample.PizzaBot.csproj", "{E8D5ED12-FA37-4756-9BE2-A459E9F29954}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotTranslator", "BotTranslator\BotTranslator.csproj", "{A761EF0A-E204-482B-9D68-7992BC362610}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E8D5ED12-FA37-4756-9BE2-A459E9F29954}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8D5ED12-FA37-4756-9BE2-A459E9F29954}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8D5ED12-FA37-4756-9BE2-A459E9F29954}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8D5ED12-FA37-4756-9BE2-A459E9F29954}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A761EF0A-E204-482B-9D68-7992BC362610}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A761EF0A-E204-482B-9D68-7992BC362610}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A761EF0A-E204-482B-9D68-7992BC362610}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A761EF0A-E204-482B-9D68-7992BC362610}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
