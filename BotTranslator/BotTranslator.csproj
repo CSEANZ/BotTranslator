@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Azure\AzureAuthToken.cs" />
     <Compile Include="Bot\EditablePromptChoice.cs" />
+    <Compile Include="Bot\TranslatingLuisDialog.cs" />
     <Compile Include="Connected Services\MicrosoftTranslator\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
