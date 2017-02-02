@@ -10,6 +10,7 @@ using BotTranslator.Glue;
 using BotTranslator.Services;
 using BotTranslator.Util;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.FormFlow;
 using Microsoft.Bot.Connector;
 
 namespace BotTranslator.Dialog
@@ -19,8 +20,6 @@ namespace BotTranslator.Dialog
         private readonly IDialogContext _original;
 
         private ITranslatorService _translatorService;
-
-       
 
         public TranslatingDialogContext(IDialogContext original)
         {
@@ -84,6 +83,7 @@ namespace BotTranslator.Dialog
 
         public void Call<R>(IDialog<R> child, ResumeAfter<R> resume)
         {
+
             if (child is EditablePromptChoice<string> p)
             {
                 var language = _translatorService.GetLanguage(_original);
@@ -93,8 +93,6 @@ namespace BotTranslator.Dialog
                     _original.Call<R>(child, resume);
                     return;
                 }
-
-                var translateTasks = new List<Task>();
 
                 var optOld = p.PromptOptions;
 

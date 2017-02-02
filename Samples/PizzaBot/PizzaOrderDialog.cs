@@ -10,18 +10,22 @@ using Microsoft.Bot.Builder.Luis;
 using Newtonsoft.Json;
 using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Connector;
-
+using BotTranslator;
 namespace Microsoft.Bot.Sample.PizzaBot
 {
     [LuisModel("4311ccf1-5ed1-44fe-9f10-a6adbad05c14", "6d0966209c6e4f6b835ce34492f3e6d9", LuisApiVersion.V2)]
     [Serializable]
-    class PizzaOrderDialog : LuisDialog<PizzaOrder>
+    class PizzaOrderDialog : LuisDialog<object>, IDialog<object>
     {
-        private readonly BuildFormDelegate<PizzaOrder> MakePizzaForm;
-
-        internal PizzaOrderDialog(BuildFormDelegate<PizzaOrder> makePizzaForm)
+        internal PizzaOrderDialog()
         {
-            this.MakePizzaForm = makePizzaForm;
+           
+        }
+
+        async Task IDialog<object>.StartAsync(IDialogContext context)
+        {
+            var translatingContext = new TranslatingDialogContext(context);
+            await base.StartAsync(translatingContext);
         }
 
         protected override async Task MessageReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
@@ -70,13 +74,25 @@ namespace Microsoft.Bot.Sample.PizzaBot
                 }
             }
 
-            var pizzaForm = new FormDialog<PizzaOrder>(new PizzaOrder(), this.MakePizzaForm, FormOptions.PromptInStart, entities);
-            context.Call<PizzaOrder>(pizzaForm, PizzaFormComplete);
+            var topicChoices = new List<string>
+            {
+                "Ham",
+                "Pineapple",
+                "Meatlovers"
+            };
+          
+
+            EditablePromptDialog.Choice(context,
+                        PizzaFormComplete,
+                        topicChoices,
+                        "Which toppings?",
+                        "I didn't understand that. Please choose one of the toppings",
+                        2);
         }
 
-        private async Task PizzaFormComplete(IDialogContext context, IAwaitable<PizzaOrder> result)
+        private async Task PizzaFormComplete(IDialogContext context, IAwaitable<string> result)
         {
-            PizzaOrder order = null;
+            string order = null;
             try
             {
                 order = await result;
@@ -95,52 +111,6 @@ namespace Microsoft.Bot.Sample.PizzaBot
             {
                 await context.PostAsync("Form returned empty response!");
             }
-
-            context.Wait(MessageReceived);
-        }
-
-        enum Days { Saturday, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday };
-
-        [LuisIntent("StoreHours")]
-        public async Task ProcessStoreHours(IDialogContext context, LuisResult result)
-        {
-            // Figuring out if the action is triggered or not
-            var bestIntent = BestIntentFrom(result);
-            var action = bestIntent.Actions.FirstOrDefault(t => t.Triggered.HasValue && t.Triggered.Value);
-            if (action != null)
-            {
-                // extracting day parameter value from action parameters
-                var dayParam = action.Parameters.Where(t => t.Name == "day").Select(t=> t.Value.FirstOrDefault(e => e.Type == "Day")?.Entity).First();
-                Days day;
-                if (Enum.TryParse(dayParam, true, out day))
-                {
-                    await this.StoreHoursResult(context, Awaitable.FromItem(day));
-                    return;
-                }
-            }
-
-            var days = (IEnumerable<Days>)Enum.GetValues(typeof(Days));
-            EditablePromptDialog.Choice(context, StoreHoursResult, days, "Which day of the week?",
-                descriptions: from day in days
-                              select (day == Days.Saturday || day == Days.Sunday) ? day.ToString() + "(no holidays)" : day.ToString());
-        }
-
-        private async Task StoreHoursResult(IDialogContext context, IAwaitable<Days> day)
-        {
-            var hours = string.Empty;
-            switch (await day)
-            {
-                case Days.Saturday:
-                case Days.Sunday:
-                    hours = "5pm to 11pm";
-                    break;
-                default:
-                    hours = "11am to 10pm";
-                    break;
-            }
-
-            var text = $"Store hours are {hours}";
-            await context.PostAsync(text);
 
             context.Wait(MessageReceived);
         }

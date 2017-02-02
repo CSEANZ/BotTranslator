@@ -40,9 +40,40 @@ namespace BotTranslator.Bot
             {
                 context = new TranslatingDialogContext(context);
             }
+
             var child = new EditablePromptChoice<T>(promptOptions);
-            context.Call<T>(child, resume);
+
+            var cp = new ResumeReplacer<T>(resume);
+
+            context.Call<T>(child, cp.ResumeReplace);
         }
+
+        [Serializable]
+        public class ResumeReplacer<T>
+        {
+            private readonly ResumeAfter<T> _outerResumer;
+
+            public ResumeReplacer()
+            {
+                
+            }
+
+            public ResumeReplacer(ResumeAfter<T> outerResumer)
+            {
+                _outerResumer = outerResumer;
+            }
+
+            public async Task ResumeReplace(IDialogContext outerContext, IAwaitable<T> result)
+            {
+                if (!(outerContext is TranslatingDialogContext))
+                {
+                    outerContext = new TranslatingDialogContext(outerContext);
+                }
+
+                await _outerResumer(outerContext, result);
+            }
+        }
+
 
         public new static void Choice<T>(IDialogContext context, ResumeAfter<T> resume, IEnumerable<T> options, string prompt, string retry = null, int attempts = 3, PromptStyle promptStyle = PromptStyle.Auto, IEnumerable<string> descriptions = null)
         {
@@ -50,6 +81,7 @@ namespace BotTranslator.Bot
             {
                 context = new TranslatingDialogContext(context);
             }
+
             Choice(context, resume, new PromptOptions<T>(prompt, retry, attempts: attempts, options: options.ToList(), promptStyler: new PromptStyler(promptStyle), descriptions: descriptions?.ToList()));
         }
     }

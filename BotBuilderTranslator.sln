@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26127.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Sample.PizzaBot", "Samples\PizzaBot\Microsoft.Bot.Sample.PizzaBot.csproj", "{E8D5ED12-FA37-4756-9BE2-A459E9F29954}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Bot.Sample.SimpleBot", "Samples\PizzaBot\Microsoft.Bot.Sample.SimpleBot.csproj", "{E8D5ED12-FA37-4756-9BE2-A459E9F29954}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotTranslator", "BotTranslator\BotTranslator.csproj", "{A761EF0A-E204-482B-9D68-7992BC362610}"
 EndProject

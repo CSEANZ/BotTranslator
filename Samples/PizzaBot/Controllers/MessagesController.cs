@@ -8,6 +8,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using System.Web.Http.Description;
 using System.Net.Http;
 using System.Diagnostics;
+using BotTranslator;
 using BotTranslator.Services;
 
 namespace Microsoft.Bot.Sample.PizzaBot
@@ -15,38 +16,8 @@ namespace Microsoft.Bot.Sample.PizzaBot
     [BotAuthentication]
     public class MessagesController : ApiController
     {
-        private static IForm<PizzaOrder> BuildForm()
-        {
-            var builder = new FormBuilder<PizzaOrder>();
-
-            ActiveDelegate<PizzaOrder> isBYO = (pizza) => pizza.Kind == PizzaOptions.BYOPizza;
-            ActiveDelegate<PizzaOrder> isSignature = (pizza) => pizza.Kind == PizzaOptions.SignaturePizza;
-            ActiveDelegate<PizzaOrder> isGourmet = (pizza) => pizza.Kind == PizzaOptions.GourmetDelitePizza;
-            ActiveDelegate<PizzaOrder> isStuffed = (pizza) => pizza.Kind == PizzaOptions.StuffedPizza;
-
-            return builder
-                // .Field(nameof(PizzaOrder.Choice))
-                .Field(nameof(PizzaOrder.Size))
-                .Field(nameof(PizzaOrder.Kind))
-                .Field("BYO.Crust", isBYO)
-                .Field("BYO.Sauce", isBYO)
-                .Field("BYO.Toppings", isBYO)
-                .Field(nameof(PizzaOrder.GourmetDelite), isGourmet)
-                .Field(nameof(PizzaOrder.Signature), isSignature)
-                .Field(nameof(PizzaOrder.Stuffed), isStuffed)
-                .AddRemainingFields()
-                .Confirm("Would you like a {Size}, {BYO.Crust} crust, {BYO.Sauce}, {BYO.Toppings} pizza?", isBYO)
-                .Confirm("Would you like a {Size}, {&Signature} {Signature} pizza?", isSignature, dependencies: new string[] { "Size", "Kind", "Signature" })
-                .Confirm("Would you like a {Size}, {&GourmetDelite} {GourmetDelite} pizza?", isGourmet)
-                .Confirm("Would you like a {Size}, {&Stuffed} {Stuffed} pizza?", isStuffed)
-                .Build()
-                ;
-        }
-
-        internal static IDialog<PizzaOrder> MakeRoot()
-        {
-            return Chain.From(() => new PizzaOrderDialog(BuildForm));
-        }
+       
+        
 
         /// <summary>
         /// POST: api/Messages
@@ -56,11 +27,11 @@ namespace Microsoft.Bot.Sample.PizzaBot
         [ResponseType(typeof(void))]
         public virtual async Task<HttpResponseMessage> Post([FromBody] Activity activity)
         {
-            TranslatorService.Instance.SetKey("[Your key]");
+            TranslatorService.Instance.SetKey("369985bb85fe48baad343798be0d13eb");
             if (activity != null)
             {
 
-                if (activity.Text.ToLowerInvariant().Contains("command language"))
+                if (activity.Text != null && activity.Text.ToLowerInvariant().Contains("command language"))
                 {
                     var t = activity.Text.ToLowerInvariant().Replace("command language", "");
                     t = t.Trim();
@@ -82,7 +53,7 @@ namespace Microsoft.Bot.Sample.PizzaBot
                     switch (activity.GetActivityType())
                     {
                         case ActivityTypes.Message:
-                            await Conversation.SendAsync(activity, MakeRoot);
+                            await Conversation.SendAsync(activity, () => new PizzaOrderDialog());
                             break;
 
                         case ActivityTypes.ConversationUpdate:
