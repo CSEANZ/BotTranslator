@@ -27,7 +27,7 @@ namespace Microsoft.Bot.Sample.PizzaBot
         [ResponseType(typeof(void))]
         public virtual async Task<HttpResponseMessage> Post([FromBody] Activity activity)
         {
-            TranslatorService.Instance.SetKey("369985bb85fe48baad343798be0d13eb");
+            TranslatorService.Instance.SetKey("[Your key here]");
             if (activity != null)
             {
 
