@@ -84,7 +84,7 @@ Grab your own [LUIS](http://luis.ai) keys [here](https://portal.azure.com/#creat
 
 *TranslatingLuisDialog* will automatically intercept your outgoing messages and translate them back to the *activated language*
 
-### Activating TextTranslation
+### Activating Text Translation
 
 Before translation will occur, it needs to be activated. 
 
