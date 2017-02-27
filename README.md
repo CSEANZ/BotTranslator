@@ -94,47 +94,47 @@ The calls to *QueryQnaMakerAsync* and *QueryAzureSearch* have been left in as an
 
 ```csharp
 [LuisIntent("")]
-        public async Task NoIntent(IDialogContext context, LuisResult result)
+public async Task NoIntent(IDialogContext context, LuisResult result)
+{
+    
+    var sentReply = await QueryQnaMakerAsync(context, result);
+
+    if (sentReply)
+    {
+        return;
+    }
+
+    // Add Azure Search fall-through here if required
+    // sentReply = await QueryAzureSearch(contenxt, result);
+    //if (sentReply)
+    //{
+    //    return;
+    //}
+
+    if (_translatorService.GetLanguage(context) != "en")
+    {
+        var checkLanguage = await _translatorService.Detect(result.Query);
+        if (checkLanguage != "en")
         {
-            
-            var sentReply = await QueryQnaMakerAsync(context, result);
+            context.UserData.SetValue("checkLanguage", checkLanguage);
 
-            if (sentReply)
-            {
-                return;
-            }
+            EditablePromptDialog.Choice(context,
+                LanuageSelectionChoicesAsync,
+                new List<string> {"Yes", "No"},
+                await _translatorService.Translate(
+                    "You are not speaking English! Would you like me to translate for you?", "en",
+                    checkLanguage),
+                await _translatorService.Translate(
+                    "I didn't understand that. Please choose one of the options", "en",
+                    checkLanguage),
+                2);
 
-            // Add Azure Search fall-through here if required
-            // sentReply = await QueryAzureSearch(contenxt, result);
-            //if (sentReply)
-            //{
-            //    return;
-            //}
-
-            if (_translatorService.GetLanguage(context) != "en")
-            {
-                var checkLanguage = await _translatorService.Detect(result.Query);
-                if (checkLanguage != "en")
-                {
-                    context.UserData.SetValue("checkLanguage", checkLanguage);
-
-                    EditablePromptDialog.Choice(context,
-                        LanuageSelectionChoicesAsync,
-                        new List<string> {"Yes", "No"},
-                        await _translatorService.Translate(
-                            "You are not speaking English! Would you like me to translate for you?", "en",
-                            checkLanguage),
-                        await _translatorService.Translate(
-                            "I didn't understand that. Please choose one of the options", "en",
-                            checkLanguage),
-                        2);
-
-                    return;
-                }
-            }
-
-            context.Wait(MessageReceived);
+            return;
         }
+    }
+
+    context.Wait(MessageReceived);
+}
 ```
 
 This will fire a choice back to the user in their own language asking if they would like to start translation. Note that here we're manually translating - this is becasue the system has not been activated in their language so it needs to beforced manually. 
