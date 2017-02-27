@@ -145,43 +145,43 @@ This *EditablePromptDialog* has a callback to *LanguageSelectionChoicesAsync*.
 
 ```csharp
 public async Task LanuageSelectionChoicesAsync(IDialogContext context, IAwaitable<string> result)
+{
+    try
+    {
+
+        string choice = await result;
+
+        if (choice.ToLower() == "no")
         {
-            try
+            await context.PostAsync("No troubles, ignore me.");
+        }
+        else
+        {
+            string checkLanguage;
+            context.UserData.TryGetValue<string>("checkLanguage", out checkLanguage);
+            if (string.IsNullOrWhiteSpace(checkLanguage))
             {
-
-                string choice = await result;
-
-                if (choice.ToLower() == "no")
-                {
-                    await context.PostAsync("No troubles, ignore me.");
-                }
-                else
-                {
-                    string checkLanguage;
-                    context.UserData.TryGetValue<string>("checkLanguage", out checkLanguage);
-                    if (string.IsNullOrWhiteSpace(checkLanguage))
-                    {
-                        await context.PostAsync("Something went wrong and I could not detect the language.");
-                    }
-                    else
-                    {
-                        TranslatorService.Instance.SetLanguage(context, checkLanguage);
-                        await context.PostAsync("No problem - it has been set!");
-                    }
-                }
+                await context.PostAsync("Something went wrong and I could not detect the language.");
             }
-            catch (TooManyAttemptsException tme)
+            else
             {
-                await context.PostAsync("Sorry, I wasn't able to understand your response. Please try asking for session information again.");
-                context.Wait(MessageReceived);
-            }
-            catch (Exception e)
-            {
-                await context.PostAsync("An error ocurred within TimeSlotChoiceAsync, please try again later.");
-                context.Wait(MessageReceived);
-
+                TranslatorService.Instance.SetLanguage(context, checkLanguage);
+                await context.PostAsync("No problem - it has been set!");
             }
         }
+    }
+    catch (TooManyAttemptsException tme)
+    {
+        await context.PostAsync("Sorry, I wasn't able to understand your response. Please try asking for session information again.");
+        context.Wait(MessageReceived);
+    }
+    catch (Exception e)
+    {
+        await context.PostAsync("An error ocurred within TimeSlotChoiceAsync, please try again later.");
+        context.Wait(MessageReceived);
+
+    }
+}
 ```
 
 This is where we handle the user's language choice and set it to bot state. 
@@ -191,7 +191,7 @@ This is where we handle the user's language choice and set it to bot state.
 The last bit is allowing the user to disable language. In the simple example we achive this by scanning for "commands" in *MessagesController*  before we translate / call the LuisDialog.
 
 ```csharp
- if (activity != null)
+if (activity != null)
 {
 
     if (activity.Text != null && activity.Text.ToLowerInvariant().Contains("command language"))
