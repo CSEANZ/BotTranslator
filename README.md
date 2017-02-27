@@ -84,6 +84,8 @@ Grab your own [LUIS](http://luis.ai) keys [here](https://portal.azure.com/#creat
 
 *TranslatingLuisDialog* will automatically intercept your outgoing messages and translate them back to the *activated language*
 
+**NOTE** The SimpleIgniteBot example does not use *TranslatingLuisDialog*, it has the same features implemented direcly in the main LUIS Dialog. 
+
 ### Activating Text Translation
 
 Before translation will occur, it needs to be activated. 
