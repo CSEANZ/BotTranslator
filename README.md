@@ -10,6 +10,8 @@ It works by intercepting and wrapping internal [Bot Builder](https://dev.botfram
 
 For another more in-depth example, see [this project](https://github.com/jakkaj/SimpleBot).
 
+<img src="https://cloud.githubusercontent.com/assets/5225782/23356060/9cc8d094-fd2c-11e6-9792-0f116d1b1d41.gif" width="800px"/>
+
 #### Install the Nuget 
 
 ```
