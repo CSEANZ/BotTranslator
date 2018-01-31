@@ -11,7 +11,7 @@ namespace BotTranslator.Bot
     [Serializable]
     public class EditablePromptChoice<T> : PromptDialog.PromptChoice<T>
     {
-        public PromptOptions<T> PromptOptions => promptOptions;
+        public IPromptOptions<T> PromptOptions => promptOptions;
 
         public EditablePromptChoice(IEnumerable<T> options, string prompt, string retry, int attempts, PromptStyle promptStyle = PromptStyle.Auto, IEnumerable<string> descriptions = null) : base(options, prompt, retry, attempts, promptStyle, descriptions)
         {
