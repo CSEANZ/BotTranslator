@@ -2,9 +2,9 @@
 <package >
   <metadata>
     <id>SimpleBotTranslator</id>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <title>Simple Bot Translator</title>
-    <authors>Jordan Knight, DX Australia</authors>
+    <authors>Jordan Knight, CSE ANZ</authors>
     <owners>jakkaj</owners>
     <licenseUrl>https://github.com/MSFTAuDX/BotTranslator/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/MSFTAuDX/BotTranslator</projectUrl>
@@ -12,12 +12,12 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Tools to help integrate Microsoft Cognitive Services translation in to bots made with the Bot Builder (C#)</description>
     <releaseNotes></releaseNotes>
-    <copyright>Copyright 2017</copyright>
+    <copyright>Copyright 2017-2018</copyright>
     <tags>Bot Cognitive Translation</tags>   
     <dependencies>
        <dependency id="Autofac" version="4.3.0" />      
-       <dependency id="Microsoft.Bot.Builder" version="3.5.3" />
-       <dependency id="Microsoft.Bot.Builder.FormFlow.Json" version="3.1.1" />
+       <dependency id="Microsoft.Bot.Builder" version="3.12.2.4" />
+       <dependency id="Microsoft.Bot.Builder.FormFlow.Json" version="3.12.2.4" />
     </dependencies>
   </metadata>
 </package>
